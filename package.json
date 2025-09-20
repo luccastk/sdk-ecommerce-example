@@ -5,18 +5,34 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "dev": "node index.js",
-    "build": "echo 'Build completed'",
-    "vercel-build": "echo 'Vercel build completed'"
+    "dev": "set NODE_ENV=development && node index.js",
+    "dev:react": "vite",
+    "dev:full": "concurrently \"npm run dev\" \"npm run dev:react\"",
+    "build": "vite build",
+    "preview": "vite preview",
+    "vercel-build": "vite build"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-tabs": "^1.1.13",
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.3",
     "axios": "^1.12.2",
     "express": "^5.1.0",
+    "lucide-react": "^0.544.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
     "sdk-antifraud-core": "^1.0.4",
-    "serverless-http": "^4.0.0"
+    "serverless-http": "^4.0.0",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.6"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
   }
 }

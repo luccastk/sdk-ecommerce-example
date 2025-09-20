@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const port = 3000;
+const port = process.env.NODE_ENV === "development" ? 3001 : 3000;
 
 // Inicializar verificador
 const verifier = AdvancedVerifier.init();
@@ -94,39 +94,88 @@ app.get("/api/verify-ip", verifier.middlewareIpOnly(), (req, res) => {
   res.json(response);
 });
 
-// 2. Coleta de Fingerprint - Demonstração das capacidades
-app.get("/api/fingerprint", (req, res) => {
+// 2. Coleta de Fingerprint - Recebe do frontend
+app.post("/api/fingerprint", (req, res) => {
   try {
-    console.log("🔍 Iniciando coleta de fingerprints");
-    const collector = new FingerprintCollector();
+    console.log("🔍 Recebendo fingerprints do frontend");
+    console.log("📦 Request body:", JSON.stringify(req.body, null, 2));
+    const { fingerprint } = req.body;
 
-    const deviceFingerprint = collector.collectDeviceFingerprint();
-    const behaviorFingerprint = collector.collectBehaviorFingerprint();
-    const completeFingerprint =
-      collector.collectCompleteFingerprint("demo-user");
+    if (!fingerprint) {
+      return res.status(400).json({
+        success: false,
+        error: "Fingerprint data is required",
+        timestamp: new Date().toISOString(),
+      });
+    }
 
-    console.log("✅ Fingerprints coletados:", {
-      device: Object.keys(deviceFingerprint).length + " campos",
-      behavior: Object.keys(behaviorFingerprint).length + " campos",
-      complete: Object.keys(completeFingerprint).length + " campos",
+    // Adiciona informações do servidor
+    const serverInfo = {
+      serverTimestamp: new Date().toISOString(),
+      userAgent: req.headers["user-agent"],
+      ip: req.realIp,
+      headers: {
+        "x-forwarded-for": req.headers["x-forwarded-for"],
+        "x-real-ip": req.headers["x-real-ip"],
+        "cf-connecting-ip": req.headers["cf-connecting-ip"],
+      },
+    };
+
+    const completeFingerprint = {
+      ...fingerprint,
+      server: serverInfo,
+      processed: true,
+    };
+
+    console.log("✅ Fingerprints processados:", {
+      device: fingerprint.device
+        ? Object.keys(fingerprint.device).length + " campos"
+        : "0 campos",
+      behavior: fingerprint.behavior
+        ? Object.keys(fingerprint.behavior).length + " campos"
+        : "0 campos",
+      network: fingerprint.network
+        ? Object.keys(fingerprint.network).length + " campos"
+        : "0 campos",
+      server: Object.keys(serverInfo).length + " campos adicionais",
     });
 
     res.json({
       success: true,
-      message: "Fingerprints coletados com sucesso",
+      message: "Fingerprints processados com sucesso",
       data: {
-        device: deviceFingerprint,
-        behavior: behaviorFingerprint,
-        complete: completeFingerprint,
+        original: fingerprint,
+        enhanced: completeFingerprint,
+        summary: {
+          deviceFields: fingerprint.device
+            ? Object.keys(fingerprint.device).length
+            : 0,
+          behaviorFields: fingerprint.behavior
+            ? Object.keys(fingerprint.behavior).length
+            : 0,
+          networkFields: fingerprint.network
+            ? Object.keys(fingerprint.network).length
+            : 0,
+          serverFields: Object.keys(serverInfo).length,
+          totalFields:
+            (fingerprint.device ? Object.keys(fingerprint.device).length : 0) +
+            (fingerprint.behavior
+              ? Object.keys(fingerprint.behavior).length
+              : 0) +
+            (fingerprint.network
+              ? Object.keys(fingerprint.network).length
+              : 0) +
+            Object.keys(serverInfo).length,
+        },
       },
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("❌ Erro na coleta de fingerprint:", error);
+    console.error("❌ Erro no processamento de fingerprint:", error);
     res.status(500).json({
       success: false,
       error: error.message,
-      stack: error.stack,
+      message: "Erro ao processar fingerprints",
       timestamp: new Date().toISOString(),
     });
   }
