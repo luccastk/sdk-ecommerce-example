@@ -65,12 +65,9 @@ const JsonModal = ({ isOpen, onClose, title, data, subtitle }) => {
             </div>
           </div>
 
-           <div className="json-modal-body">
-             <CustomJsonView 
-               data={data} 
-               collapsed={2}
-             />
-           </div>
+          <div className="json-modal-body">
+            <CustomJsonView data={data} collapsed={2} />
+          </div>
 
           <div className="json-modal-footer">
             <div className="json-stats">
