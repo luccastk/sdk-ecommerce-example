@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🛡️ SDK AntiFraud - Demonstração Completa</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🛡️ SDK AntiFraud</h1>
+        <p>Demonstração Completa de Casos de Uso</p>
+
+        <!-- Stats em tempo real -->
+        <div class="stats-bar">
+          <div class="stat-item">
+            <div class="stat-number" id="mouseCount">0</div>
+            <div class="stat-label">Movimentos do Mouse</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" id="clickCount">0</div>
+            <div class="stat-label">Cliques</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" id="keyCount">0</div>
+            <div class="stat-label">Teclas</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" id="sessionTime">0s</div>
+            <div class="stat-label">Tempo de Sessão</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <!-- Demonstrações Básicas -->
+        <div class="section">
+          <h2>🔍 Demonstrações Básicas</h2>
+          <p class="section-description">
+            Teste as funcionalidades fundamentais do SDK AntiFraud
+          </p>
+
+          <div class="basic-demos">
+            <div class="basic-demo-card">
+              <h4>Verificação de IP</h4>
+              <div class="endpoint-info">
+                <span class="method-badge get">GET</span>/api/verify-ip
+              </div>
+              <button class="demo-btn" onclick="testIpVerification()">
+                <span>🌐</span> Verificar Meu IP
+              </button>
+              <div id="ipResult" class="result-container"></div>
+            </div>
+
+            <div class="basic-demo-card">
+              <h4>Coleta de Fingerprint</h4>
+              <div class="endpoint-info">
+                <span class="method-badge get">GET</span>/api/fingerprint
+              </div>
+              <button class="demo-btn" onclick="testFingerprint()">
+                <span>👆</span> Coletar Fingerprint
+              </button>
+              <div id="fingerprintResult" class="result-container"></div>
+            </div>
+
+            <div class="basic-demo-card">
+              <h4>Verificação Avançada</h4>
+              <div class="endpoint-info">
+                <span class="method-badge get">GET</span>/api/demo
+              </div>
+              <button class="demo-btn" onclick="testAdvancedVerification()">
+                <span>🛡️</span> Verificação Completa
+              </button>
+              <div id="advancedResult" class="result-container"></div>
+            </div>
+
+            <div class="basic-demo-card">
+              <h4>Debug de IP</h4>
+              <div class="endpoint-info">
+                <span class="method-badge get">GET</span>/api/ip-debug
+              </div>
+              <button class="demo-btn" onclick="testIpDebug()">
+                <span>🔍</span> Debug Completo de IP
+              </button>
+              <div id="ipDebugResult" class="result-container"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Casos de Uso Reais -->
+        <div class="section">
+          <h2>🏪 Casos de Uso Reais</h2>
+          <p class="section-description">
+            Demonstrações baseadas em cenários do mundo real com diferentes
+            estratégias de verificação
+          </p>
+
+          <div class="use-cases-grid">
+            <!-- E-commerce -->
+            <div class="use-case-card">
+              <h3>🛒 E-commerce (Regras Rígidas)</h3>
+              <p>
+                Checkout com verificação rigorosa para transações financeiras.
+                Bloqueia transações de alto risco.
+              </p>
+
+              <div class="endpoint-info">
+                <span class="method-badge post">POST</span>/api/ecommerce
+              </div>
+
+              <div class="demo-controls">
+                <input
+                  type="number"
+                  class="demo-input"
+                  id="ecommerceAmount"
+                  placeholder="Valor (R$)"
+                  value="100"
+                />
+                <input
+                  type="text"
+                  class="demo-input"
+                  id="ecommerceProduct"
+                  placeholder="Produto"
+                  value="Smartphone"
+                />
+              </div>
+
+              <button class="demo-btn" onclick="testEcommerce()">
+                <span>💳</span> Processar Compra
+              </button>
+
+              <div id="ecommerceResult" class="result-container"></div>
+            </div>
+
+            <!-- Banking -->
+            <div class="use-case-card">
+              <h3>🏦 Banking (Regras Flexíveis)</h3>
+              <p>
+                Sistema bancário com análise de risco mas sem bloqueios
+                absolutos. Sempre permite com diferentes níveis de controle.
+              </p>
+
+              <div class="endpoint-info">
+                <span class="method-badge post">POST</span>/api/banking
+              </div>
+
+              <div class="demo-controls">
+                <input
+                  type="number"
+                  class="demo-input"
+                  id="bankingAmount"
+                  placeholder="Valor (R$)"
+                  value="1000"
+                />
+                <input
+                  type="text"
+                  class="demo-input"
+                  id="bankingRecipient"
+                  placeholder="Destinatário"
+                  value="João Silva"
+                />
+              </div>
+
+              <button class="demo-btn" onclick="testBanking()">
+                <span>💸</span> Fazer Transferência
+              </button>
+
+              <div id="bankingResult" class="result-container"></div>
+            </div>
+
+            <!-- Gaming -->
+            <div class="use-case-card">
+              <h3>🎮 Gaming (Regras Personalizadas)</h3>
+              <p>
+                Sistema de jogos com alertas mas sem bloqueios de usuário. Foca
+                em experiência do usuário.
+              </p>
+
+              <div class="endpoint-info">
+                <span class="method-badge post">POST</span>/api/gaming
+              </div>
+
+              <div class="demo-controls">
+                <input
+                  type="number"
+                  class="demo-input"
+                  id="gamingCredits"
+                  placeholder="Créditos"
+                  value="500"
+                />
+              </div>
+
+              <button class="demo-btn" onclick="testGaming()">
+                <span>🪙</span> Comprar Créditos
+              </button>
+
+              <div id="gamingResult" class="result-container"></div>
+            </div>
+
+            <!-- Login -->
+            <div class="use-case-card">
+              <h3>🔐 Login (Verificação de IP)</h3>
+              <p>
+                Sistema de autenticação com 2FA baseado em risco de IP. Solicita
+                verificação adicional quando necessário.
+              </p>
+
+              <div class="endpoint-info">
+                <span class="method-badge post">POST</span>/api/login
+              </div>
+
+              <div class="demo-controls">
+                <input
+                  type="email"
+                  class="demo-input"
+                  id="loginUsername"
+                  placeholder="E-mail"
+                  value="demo@example.com"
+                />
+              </div>
+
+              <button class="demo-btn" onclick="testLogin()">
+                <span>🔑</span> Fazer Login
+              </button>
+
+              <div id="loginResult" class="result-container"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <p>
+          <strong>SDK AntiFraud</strong> - Demonstração Completa de
+          Funcionalidades<br />
+          Baseado na documentação oficial •
+          <a
+            href="https://github.com/luccastk/SDK-AntiFraud"
+            target="_blank"
+            class="github-link"
+          >
+            GitHub SDK AntiFraud
+          </a>
+        </p>
+      </div>
+    </div>
+
+    <script>
+      // Tracking de comportamento em tempo real
+      let behaviorStats = {
+        mouseMovements: 0,
+        clicks: 0,
+        keystrokes: 0,
+        sessionStart: Date.now(),
+      };
+
+      // Event listeners para tracking
+      document.addEventListener("mousemove", () => {
+        behaviorStats.mouseMovements++;
+        document.getElementById("mouseCount").textContent =
+          behaviorStats.mouseMovements;
+      });
+
+      document.addEventListener("click", () => {
+        behaviorStats.clicks++;
+        document.getElementById("clickCount").textContent =
+          behaviorStats.clicks;
+      });
+
+      document.addEventListener("keydown", () => {
+        behaviorStats.keystrokes++;
+        document.getElementById("keyCount").textContent =
+          behaviorStats.keystrokes;
+      });
+
+      // Atualizar tempo de sessão
+      setInterval(() => {
+        const sessionTime = Math.floor(
+          (Date.now() - behaviorStats.sessionStart) / 1000
+        );
+        document.getElementById("sessionTime").textContent = sessionTime + "s";
+      }, 1000);
+
+      // Função helper para mostrar resultados
+      function showResult(containerId, data, status = "info") {
+        const container = document.getElementById(containerId);
+        container.className = `result-container show`;
+
+        const statusClass =
+          data.success === false
+            ? "error"
+            : data.success === true
+            ? "success"
+            : status;
+
+        container.innerHTML = `
+                <div class="result-header">
+                    <span class="result-status ${statusClass}">
+                        ${
+                          data.success === false
+                            ? "ERRO"
+                            : data.success === true
+                            ? "SUCESSO"
+                            : status.toUpperCase()
+                        }
+                    </span>
+                    <small>⏰ ${new Date().toLocaleTimeString()}</small>
+                </div>
+                <div class="result-content">${JSON.stringify(
+                  data,
+                  null,
+                  2
+                )}</div>
+            `;
+      }
+
+      // Função helper para loading
+      function setLoading(buttonElement, isLoading) {
+        if (isLoading) {
+          buttonElement.disabled = true;
+          buttonElement.innerHTML = buttonElement.innerHTML.replace(
+            /^[^>]*>/,
+            (match) => match.slice(0, -1) + ' <span class="loading"></span>>'
+          );
+        } else {
+          buttonElement.disabled = false;
+          buttonElement.innerHTML = buttonElement.innerHTML.replace(
+            ' <span class="loading"></span>',
+            ""
+          );
+        }
+      }
+
+      // Demonstrações básicas
+      async function testIpVerification() {
+        const btn = event.target;
+        setLoading(btn, true);
+
+        try {
+          const response = await fetch("/api/verify-ip");
+          const data = await response.json();
+          showResult("ipResult", data);
+        } catch (error) {
+          showResult("ipResult", { error: error.message }, "error");
+        } finally {
+          setLoading(btn, false);
+        }
+      }
+
+      async function testFingerprint() {
+        const btn = event.target;
+        setLoading(btn, true);
+
+        try {
+          const response = await fetch("/api/fingerprint");
+          const data = await response.json();
+          showResult("fingerprintResult", data);
+        } catch (error) {
+          showResult("fingerprintResult", { error: error.message }, "error");
+        } finally {
+          setLoading(btn, false);
+        }
+      }
+
+      async function testAdvancedVerification() {
+        const btn = event.target;
+        setLoading(btn, true);
+
+        try {
+          const response = await fetch("/api/demo");
+          const data = await response.json();
+          showResult("advancedResult", data);
+        } catch (error) {
+          showResult("advancedResult", { error: error.message }, "error");
+        } finally {
+          setLoading(btn, false);
+        }
+      }
+
+      // Casos de uso reais
+      async function testEcommerce() {
+        const btn = event.target;
+        setLoading(btn, true);
+
+        const amount = document.getElementById("ecommerceAmount").value;
+        const product = document.getElementById("ecommerceProduct").value;
+
+        try {
+          const response = await fetch("/api/ecommerce", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ amount: Number(amount), product }),
+          });
+          const data = await response.json();
+          showResult("ecommerceResult", data);
+        } catch (error) {
+          showResult("ecommerceResult", { error: error.message }, "error");
+        } finally {
+          setLoading(btn, false);
+        }
+      }
+
+      async function testBanking() {
+        const btn = event.target;
+        setLoading(btn, true);
+
+        const amount = document.getElementById("bankingAmount").value;
+        const recipient = document.getElementById("bankingRecipient").value;
+
+        try {
+          const response = await fetch("/api/banking", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ amount: Number(amount), recipient }),
+          });
+          const data = await response.json();
+          showResult("bankingResult", data);
+        } catch (error) {
+          showResult("bankingResult", { error: error.message }, "error");
+        } finally {
+          setLoading(btn, false);
+        }
+      }
+
+      async function testGaming() {
+        const btn = event.target;
+        setLoading(btn, true);
+
+        const credits = document.getElementById("gamingCredits").value;
+
+        try {
+          const response = await fetch("/api/gaming", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ credits: Number(credits) }),
+          });
+          const data = await response.json();
+          showResult("gamingResult", data);
+        } catch (error) {
+          showResult("gamingResult", { error: error.message }, "error");
+        } finally {
+          setLoading(btn, false);
+        }
+      }
+
+      async function testLogin() {
+        const btn = event.target;
+        setLoading(btn, true);
+
+        const username = document.getElementById("loginUsername").value;
+
+        try {
+          const response = await fetch("/api/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username }),
+          });
+          const data = await response.json();
+          showResult("loginResult", data);
+        } catch (error) {
+          showResult("loginResult", { error: error.message }, "error");
+        } finally {
+          setLoading(btn, false);
+        }
+      }
+
+      async function testIpDebug() {
+        const btn = event.target;
+        setLoading(btn, true);
+
+        try {
+          const response = await fetch("/api/ip-debug");
+          const data = await response.json();
+          showResult("ipDebugResult", data);
+        } catch (error) {
+          showResult("ipDebugResult", { error: error.message }, "error");
+        } finally {
+          setLoading(btn, false);
+        }
+      }
+
+      // Animação de entrada
+      document.addEventListener("DOMContentLoaded", () => {
+        const cards = document.querySelectorAll(
+          ".use-case-card, .basic-demo-card"
+        );
+        cards.forEach((card, index) => {
+          card.style.opacity = "0";
+          card.style.transform = "translateY(20px)";
+          setTimeout(() => {
+            card.style.transition = "all 0.6s ease";
+            card.style.opacity = "1";
+            card.style.transform = "translateY(0)";
+          }, index * 100);
+        });
+      });
+    </script>
+  </body>
+</html>
