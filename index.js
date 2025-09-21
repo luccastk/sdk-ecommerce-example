@@ -45,11 +45,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Middleware para verificação avançada em algumas rotas
-app.use(
-  "/api/demo",
-  verifier.middlewareAdvancedVerify("/api/demo", "demo-user")
-);
+// Middleware removido - será aplicado por requisição
 
 // Rota principal
 app.get("/", (req, res) => {
@@ -181,8 +177,8 @@ app.post("/api/fingerprint", (req, res) => {
   }
 });
 
-// 3. Verificação Avançada com Middleware
-app.get("/api/demo", (req, res) => {
+// 3. Verificação Avançada com Middleware - Aplicado por requisição
+app.get("/api/demo", verifier.middlewareAdvancedVerify("/api/demo", "demo-user"), (req, res) => {
   const result = req.verificationResult;
 
   console.log(result.status);
