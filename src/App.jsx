@@ -77,7 +77,10 @@ function App() {
         network: { ip: "unknown" },
         timestamp: Date.now(),
       };
-      setSessionData((prev) => ({ ...prev, fingerprints: fallbackFingerprint }));
+      setSessionData((prev) => ({
+        ...prev,
+        fingerprints: fallbackFingerprint,
+      }));
       return fallbackFingerprint;
     }
   };
