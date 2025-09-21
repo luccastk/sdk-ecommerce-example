@@ -16,6 +16,20 @@
       "dest": "/index.js"
     },
     {
+      "src": "/assets/(.*\\.js)$",
+      "dest": "/dist/assets/$1",
+      "headers": {
+        "Content-Type": "application/javascript"
+      }
+    },
+    {
+      "src": "/assets/(.*\\.css)$",
+      "dest": "/dist/assets/$1",
+      "headers": {
+        "Content-Type": "text/css"
+      }
+    },
+    {
       "src": "/assets/(.*)",
       "dest": "/dist/assets/$1"
     },
