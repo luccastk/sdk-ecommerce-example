@@ -24,44 +24,70 @@ const BasicDemos = ({ onApiCall }) => {
 
       if (endpoint === "fingerprint") {
         // Coleta fingerprint no frontend usando SDK singleton
-        const collector = FingerprintCollector.getInstance();
-        const fingerprint = collector.collectCompleteFingerprint("demo-user");
+        try {
+          const collector = FingerprintCollector.getInstance();
+          const fingerprint = collector.collectCompleteFingerprint("demo-user");
 
-        // Envia para o backend
-        response = await fetch(`/api/${endpoint}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ fingerprint }),
-        });
+          // Envia para o backend
+          response = await fetch(`/api/${endpoint}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ fingerprint }),
+          });
 
-        requestData = {
-          method: "POST",
-          endpoint: `/api/${endpoint}`,
-          timestamp: new Date().toISOString(),
-          headers: { "Content-Type": "application/json" },
-          body: fingerprint,
-        };
+          requestData = {
+            method: "POST",
+            endpoint: `/api/${endpoint}`,
+            timestamp: new Date().toISOString(),
+            headers: { "Content-Type": "application/json" },
+            body: fingerprint,
+          };
+        } catch (sdkError) {
+          console.error("❌ Erro no SDK:", sdkError);
+          // Fallback: criar fingerprint básico
+          const fallbackFingerprint = {
+            sessionId: `session_${Date.now()}_fallback`,
+            device: { userAgent: navigator.userAgent || "Unknown" },
+            behavior: { timestamp: Date.now() },
+            network: { ip: "unknown" },
+            timestamp: Date.now(),
+          };
+
+          response = await fetch(`/api/${endpoint}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ fingerprint: fallbackFingerprint }),
+          });
+
+          requestData = {
+            method: "POST",
+            endpoint: `/api/${endpoint}`,
+            timestamp: new Date().toISOString(),
+            headers: { "Content-Type": "application/json" },
+            body: fallbackFingerprint,
+          };
+        }
       } else {
         response = await fetch(`/api/${endpoint}`);
       }
 
-        // Clone response para poder ler o texto se JSON falhar
-        const responseClone = response.clone();
-        try {
-          data = await response.json();
-        } catch (jsonError) {
-          console.error("❌ Erro ao fazer parse do JSON:", jsonError);
-          const responseText = await responseClone.text();
-          console.log("📄 Response text:", responseText);
-          data = { 
-            error: "Invalid JSON response", 
-            details: jsonError.message,
-            responseText: responseText,
-            status: response.status,
-            statusText: response.statusText
-          };
-        }
-        setResults((prev) => ({ ...prev, [resultKey]: data }));
+      // Clone response para poder ler o texto se JSON falhar
+      const responseClone = response.clone();
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        console.error("❌ Erro ao fazer parse do JSON:", jsonError);
+        const responseText = await responseClone.text();
+        console.log("📄 Response text:", responseText);
+        data = {
+          error: "Invalid JSON response",
+          details: jsonError.message,
+          responseText: responseText,
+          status: response.status,
+          statusText: response.statusText,
+        };
+      }
+      setResults((prev) => ({ ...prev, [resultKey]: data }));
 
       // Enviar dados para o debug panel
       onApiCall({

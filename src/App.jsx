@@ -21,13 +21,21 @@ function App() {
   });
 
   useEffect(() => {
-    // O FingerprintCollector do SDK já inicializa automaticamente
-    // Usar o session ID do collector
-    const fingerprint = collector.collectCompleteFingerprint("demo-user");
-    const sessionId = fingerprint.sessionId;
+    // Inicializar SDK de forma segura
+    try {
+      // O FingerprintCollector do SDK já inicializa automaticamente
+      // Usar o session ID do collector
+      const fingerprint = collector.collectCompleteFingerprint("demo-user");
+      const sessionId = fingerprint.sessionId;
 
-    setSessionData((prev) => ({ ...prev, sessionId }));
-    console.log("🚀 SDK AntiFraud initialized with session:", sessionId);
+      setSessionData((prev) => ({ ...prev, sessionId }));
+      console.log("🚀 SDK AntiFraud initialized with session:", sessionId);
+    } catch (error) {
+      console.error("❌ Erro ao inicializar SDK:", error);
+      // Fallback: usar timestamp como session ID
+      const fallbackSessionId = `session_${Date.now()}_fallback`;
+      setSessionData((prev) => ({ ...prev, sessionId: fallbackSessionId }));
+    }
   }, [collector]);
 
   const handleApiCall = (endpoint, requestData, responseData) => {
@@ -55,9 +63,23 @@ function App() {
   };
 
   const collectFingerprints = () => {
-    const fingerprints = collector.collectCompleteFingerprint("demo-user");
-    setSessionData((prev) => ({ ...prev, fingerprints }));
-    return fingerprints;
+    try {
+      const fingerprints = collector.collectCompleteFingerprint("demo-user");
+      setSessionData((prev) => ({ ...prev, fingerprints }));
+      return fingerprints;
+    } catch (error) {
+      console.error("❌ Erro ao coletar fingerprints:", error);
+      // Retornar fingerprint básico como fallback
+      const fallbackFingerprint = {
+        sessionId: `session_${Date.now()}_fallback`,
+        device: { userAgent: navigator.userAgent || "Unknown" },
+        behavior: { timestamp: Date.now() },
+        network: { ip: "unknown" },
+        timestamp: Date.now(),
+      };
+      setSessionData((prev) => ({ ...prev, fingerprints: fallbackFingerprint }));
+      return fallbackFingerprint;
+    }
   };
 
   const togglePanel = () => {
