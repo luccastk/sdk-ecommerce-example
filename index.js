@@ -178,31 +178,35 @@ app.post("/api/fingerprint", (req, res) => {
 });
 
 // 3. Verificação Avançada com Middleware - Aplicado por requisição
-app.get("/api/demo", verifier.middlewareAdvancedVerify("/api/demo", "demo-user"), (req, res) => {
-  const result = req.verificationResult;
+app.get(
+  "/api/demo",
+  verifier.middlewareAdvancedVerify("/api/demo", "demo-user"),
+  (req, res) => {
+    const result = req.verificationResult;
 
-  console.log(result.status);
+    console.log(result.status);
 
-  let response = {
-    success: true,
-    message: "Verificação avançada concluída",
-    verification: result,
-    timestamp: new Date().toISOString(),
-  };
+    let response = {
+      success: true,
+      message: "Verificação avançada concluída",
+      verification: result,
+      timestamp: new Date().toISOString(),
+    };
 
-  if (result.status === "DENY") {
-    response.success = false;
-    response.message = "Acesso negado - alto risco detectado";
-    return res.status(403).json(response);
+    if (result.status === "DENY") {
+      response.success = false;
+      response.message = "Acesso negado - alto risco detectado";
+      return res.status(403).json(response);
+    }
+
+    if (result.status === "REVIEW") {
+      response.message = "Acesso em revisão - risco moderado";
+      return res.status(202).json(response);
+    }
+
+    res.json(response);
   }
-
-  if (result.status === "REVIEW") {
-    response.message = "Acesso em revisão - risco moderado";
-    return res.status(202).json(response);
-  }
-
-  res.json(response);
-});
+);
 
 // 4. E-commerce - Checkout com regras rígidas
 app.post(
