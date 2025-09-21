@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import DemoCard from "./DemoCard";
-import { BrowserFingerprintCollector } from "../utils/fingerprintCollector";
+import { FingerprintCollector } from "sdk-antifraud-core";
 
 const BasicDemos = ({ onApiCall }) => {
   const [results, setResults] = useState({});
@@ -23,8 +23,8 @@ const BasicDemos = ({ onApiCall }) => {
       let response, data;
 
       if (endpoint === "fingerprint") {
-        // Coleta fingerprint no frontend usando singleton
-        const collector = BrowserFingerprintCollector.getInstance();
+        // Coleta fingerprint no frontend usando SDK singleton
+        const collector = FingerprintCollector.getInstance();
         const fingerprint = collector.collectCompleteFingerprint("demo-user");
 
         // Envia para o backend

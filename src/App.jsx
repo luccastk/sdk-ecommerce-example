@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import MainInterface from "./components/MainInterface";
 import SidePanel from "./components/SidePanel";
-import { BrowserFingerprintCollector } from "./utils/fingerprintCollector";
+import { FingerprintCollector } from "sdk-antifraud-core";
 import "./App.css";
 
 function App() {
-  const [collector] = useState(BrowserFingerprintCollector.getInstance());
+  const [collector] = useState(FingerprintCollector.getInstance());
 
   // State local simples
   const [debugPanel, setDebugPanel] = useState({
@@ -21,11 +21,10 @@ function App() {
   });
 
   useEffect(() => {
-    // Inicializar tracking automático
-    collector.initBehaviorTracking();
-
-    // Usar o session ID do collector singleton
-    const sessionId = collector.sessionId;
+    // O FingerprintCollector do SDK já inicializa automaticamente
+    // Usar o session ID do collector
+    const fingerprint = collector.collectCompleteFingerprint("demo-user");
+    const sessionId = fingerprint.sessionId;
 
     setSessionData((prev) => ({ ...prev, sessionId }));
     console.log("🚀 SDK AntiFraud initialized with session:", sessionId);
