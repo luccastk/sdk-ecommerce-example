@@ -184,27 +184,45 @@ app.get(
   (req, res) => {
     const result = req.verificationResult;
 
-    console.log(result.status);
+    console.log("🔍 Resultado da verificação:", result);
+    console.log("🌐 IP da requisição:", req.ip);
+    console.log("👤 User-Agent:", req.headers['user-agent']);
 
     let response = {
       success: true,
       message: "Verificação avançada concluída",
       verification: result,
       timestamp: new Date().toISOString(),
+      requestInfo: {
+        ip: req.ip,
+        userAgent: req.headers['user-agent'],
+        language: req.headers['accept-language']
+      }
     };
 
     if (result.status === "DENY") {
       response.success = false;
       response.message = "Acesso negado - alto risco detectado";
-      return res.status(403).json(response);
+      return res.status(403)
+        .header("Cache-Control", "no-cache, no-store, must-revalidate")
+        .header("Pragma", "no-cache")
+        .header("Expires", "0")
+        .json(response);
     }
 
     if (result.status === "REVIEW") {
       response.message = "Acesso em revisão - risco moderado";
-      return res.status(202).json(response);
+      return res.status(202)
+        .header("Cache-Control", "no-cache, no-store, must-revalidate")
+        .header("Pragma", "no-cache")
+        .header("Expires", "0")
+        .json(response);
     }
 
-    res.json(response);
+    res.header("Cache-Control", "no-cache, no-store, must-revalidate")
+       .header("Pragma", "no-cache")
+       .header("Expires", "0")
+       .json(response);
   }
 );
 
