@@ -1,7 +1,33 @@
-// Frontend Fingerprint Collector
+// Frontend Fingerprint Collector - Singleton Pattern
 export class BrowserFingerprintCollector {
   constructor() {
     this.fingerprint = {};
+    this.sessionId = this.getOrCreateSessionId();
+  }
+
+  // Singleton instance
+  static instance = null;
+
+  static getInstance() {
+    if (!BrowserFingerprintCollector.instance) {
+      BrowserFingerprintCollector.instance = new BrowserFingerprintCollector();
+    }
+    return BrowserFingerprintCollector.instance;
+  }
+
+  // Gera ou recupera session ID do localStorage para manter consistência
+  getOrCreateSessionId() {
+    try {
+      let sessionId = localStorage.getItem('antifraud_session_id');
+      if (!sessionId) {
+        sessionId = this.generateSessionId();
+        localStorage.setItem('antifraud_session_id', sessionId);
+      }
+      return sessionId;
+    } catch {
+      // Fallback se localStorage não estiver disponível
+      return this.generateSessionId();
+    }
   }
 
   // Coleta informações do dispositivo
@@ -98,7 +124,7 @@ export class BrowserFingerprintCollector {
   collectCompleteFingerprint(userId = null) {
     return {
       userId: userId,
-      sessionId: this.generateSessionId(),
+      sessionId: this.sessionId, // Usar o sessionId persistido
       device: this.collectDeviceFingerprint(),
       behavior: this.collectBehaviorFingerprint(),
       network: this.collectNetworkFingerprint(),

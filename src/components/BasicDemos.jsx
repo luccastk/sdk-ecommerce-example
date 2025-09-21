@@ -23,8 +23,8 @@ const BasicDemos = ({ onApiCall }) => {
       let response, data;
 
       if (endpoint === "fingerprint") {
-        // Coleta fingerprint no frontend
-        const collector = new BrowserFingerprintCollector();
+        // Coleta fingerprint no frontend usando singleton
+        const collector = BrowserFingerprintCollector.getInstance();
         const fingerprint = collector.collectCompleteFingerprint("demo-user");
 
         // Envia para o backend

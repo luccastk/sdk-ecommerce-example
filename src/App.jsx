@@ -5,7 +5,7 @@ import { BrowserFingerprintCollector } from "./utils/fingerprintCollector";
 import "./App.css";
 
 function App() {
-  const [collector] = useState(new BrowserFingerprintCollector());
+  const [collector] = useState(BrowserFingerprintCollector.getInstance());
 
   // State local simples
   const [debugPanel, setDebugPanel] = useState({
@@ -24,10 +24,8 @@ function App() {
     // Inicializar tracking automático
     collector.initBehaviorTracking();
 
-    // Gerar session ID
-    const sessionId = `session_${Date.now()}_${Math.random()
-      .toString(36)
-      .substring(2, 9)}`;
+    // Usar o session ID do collector singleton
+    const sessionId = collector.sessionId;
 
     setSessionData((prev) => ({ ...prev, sessionId }));
     console.log("🚀 SDK AntiFraud initialized with session:", sessionId);
